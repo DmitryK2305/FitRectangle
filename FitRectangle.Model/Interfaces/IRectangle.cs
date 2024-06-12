@@ -12,4 +12,5 @@ public interface IRectangle
 
     void Change(Point p1, Point p2);
     ClippingResult Clip(IRectangle otherRect);
+    bool IsPointIn(Point point);
 }

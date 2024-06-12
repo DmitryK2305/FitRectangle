@@ -39,19 +39,19 @@ public class Rectangle : IRectangle
     {
         List<Point> points = new List<Point>();
 
-        if (PointIn(BotLeft))
+        if (otherRect.IsPointIn(BotLeft))
         {
             points.Add(BotLeft);
         }
-        if (PointIn(TopLeft))
+        if (otherRect.IsPointIn(TopLeft))
         {
             points.Add(TopLeft);
         }
-        if (PointIn(TopRight))
+        if (otherRect.IsPointIn(TopRight))
         {
             points.Add(TopRight);
         }
-        if (PointIn(BotRight))
+        if (otherRect.IsPointIn(BotRight))
         {
             points.Add(BotRight);
         }
@@ -59,7 +59,7 @@ public class Rectangle : IRectangle
         return new ClippingResult() { Clipped = points.Count != 4, Points = points.ToArray() };
     }
 
-    private bool PointIn(Point point)
+    public bool IsPointIn(Point point)
     {
         return point.X <= BotRight.X && point.X >= TopLeft.X && point.Y <= TopLeft.Y && point.Y >= BotRight.Y;
     }

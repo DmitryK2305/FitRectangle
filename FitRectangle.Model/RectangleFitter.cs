@@ -46,6 +46,8 @@ public class RectangleFitter
             
             rectangleBorders.Expand(rect);
         }
+        
+        main.Change(new Point(rectangleBorders.MinX.Value, rectangleBorders.MaxY.Value), new Point(rectangleBorders.MaxX.Value, rectangleBorders.MinY.Value));
     }
 }
 
@@ -55,6 +57,14 @@ struct RectangleBorders
     public double? MaxX = null;
     public double? MinY = null;
     public double? MaxY = null;
+
+    public RectangleBorders(double minX, double maxX, double minY, double maxY)
+    {
+        MinX = minX;
+        MaxX = maxX;
+        MinY = minY;
+        MaxY = maxY;
+    }
 
     public void Expand(IRectangle rectangle)
     {
