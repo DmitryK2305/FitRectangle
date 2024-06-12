@@ -1,11 +1,19 @@
 ﻿using System.Drawing;
 using FitRectangle.Model.Enums;
 using FitRectangle.Model.Interfaces;
+using NLog;
 
 namespace FitRectangle.Model;
 
 public class RectangleFitter
 {
+    private static readonly ILogger Logger;
+
+    static RectangleFitter()
+    {
+        Logger = LogManager.GetCurrentClassLogger();
+    }
+
     public FitterPointStrategy PointStrategy { get; set; }
     public FitterColorStrategy ColorStrategy { get; set; }
     public HashSet<Color> Colors { get; set; } = new HashSet<Color>();
@@ -13,6 +21,7 @@ public class RectangleFitter
 
     public void Fit(ref Rectangle main, IEnumerable<IRectangle> inner)
     {
+        Logger.Debug($"Fitting ({main.TopLeft.X}, {main.TopLeft.Y})");
         var selectedRects = inner;
         switch (ColorStrategy)
         {
@@ -25,9 +34,11 @@ public class RectangleFitter
                 selectedRects = selectedRects.Where(r => !Colors.Contains(r.Color));
                 break;
         }
-
+        Logger.Debug($"ColorStrategy: {ColorStrategy}");
+        
         RectangleBorders rectangleBorders = new RectangleBorders();
         bool onlyInside = PointStrategy == FitterPointStrategy.OnlyInside;
+        Logger.Debug($"PointStrategy: {PointStrategy}");
         foreach (IRectangle rect in selectedRects)
         {
             if (onlyInside)
@@ -46,8 +57,9 @@ public class RectangleFitter
             
             rectangleBorders.Expand(rect);
         }
-        
+
         main.Change(new Point(rectangleBorders.MinX.Value, rectangleBorders.MaxY.Value), new Point(rectangleBorders.MaxX.Value, rectangleBorders.MinY.Value));
+        Logger.Debug($"Fitting result: ({main.TopLeft.X}, {main.TopLeft.Y})");
     }
 }
 
